@@ -73,8 +73,8 @@ class Example extends Phaser.Scene {
         f1.add(cam, 'zoom', 0.1, 2).step(0.1).listen();
         f1.add(help, 'line1');
         f1.add(help, 'line2');
-        f1.open();
-    }*/
+        f1.open();*/
+    }
 
     update(time, delta) {
         // Update controls
