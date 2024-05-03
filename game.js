@@ -1,6 +1,7 @@
 // Define variables for the build button and building icon
 let buildButton;
 let buildingIcon;
+const gridSize = 64;
 
 // Function to create the build button
 function createBuildButton() {
