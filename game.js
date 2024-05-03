@@ -1,3 +1,66 @@
+// Define variables for the build button and building icon
+let buildButton;
+let buildingIcon;
+
+// Function to create the build button
+function createBuildButton() {
+    // Add the build button to the scene
+    buildButton = this.add.text(20, 20, 'Build', { fill: '#ffffff' });
+    buildButton.setInteractive(); // Enable interactivity
+    buildButton.on('pointerdown', showBuildingGrid, this); // Show the building grid when clicked
+}
+
+// Function to show the building grid
+function showBuildingGrid() {
+    // Create a transparent rectangle to cover the screen and act as the building grid
+    const buildingGrid = this.add.rectangle(0, 0, this.cameras.main.width, this.cameras.main.height, 0x00ff00, 0.5);
+    buildingGrid.setOrigin(0); // Set the origin to the top-left corner
+    buildingGrid.setInteractive(); // Enable interactivity
+
+    // Listen for pointer events on the building grid
+    this.input.on('pointerdown', function(pointer) {
+        // Calculate the grid position based on the pointer coordinates
+        const gridX = Math.floor(pointer.worldX / gridSize);
+        const gridY = Math.floor(pointer.worldY / gridSize);
+
+        // Check if a building is already placed at this grid position
+        if (!isBuildingPlaced(gridX, gridY)) {
+            // Place the building icon at the grid position
+            placeBuildingIcon(gridX, gridY);
+        } else {
+            // Confirm the building placement
+            confirmBuildingPlacement(gridX, gridY);
+        }
+    });
+}
+
+// Function to check if a building is already placed at the specified grid position
+function isBuildingPlaced(gridX, gridY) {
+    // Your logic to check if a building is already placed at the specified grid position
+    // Return true if a building is already placed, false otherwise
+}
+
+// Function to place the building icon at the specified grid position
+function placeBuildingIcon(gridX, gridY) {
+    // Remove any existing building icon
+    if (buildingIcon) {
+        buildingIcon.destroy();
+    }
+
+    // Create and position the building icon at the grid position
+    buildingIcon = this.add.image(gridX * gridSize, gridY * gridSize, 'buildingIcon');
+    buildingIcon.setOrigin(0); // Set the origin to the top-left corner of the icon
+}
+
+// Function to confirm the building placement
+function confirmBuildingPlacement(gridX, gridY) {
+    // Your logic to confirm the building placement
+    // This could involve adding the building to the game world, deducting resources, etc.
+    // Once confirmed, remove the building icon and building grid
+    buildingIcon.destroy();
+    this.input.off('pointerdown'); // Disable pointer events on the building grid
+}
+
 class MainMenu extends Phaser.Scene {
     constructor() {
         super({ key: 'MainMenu' });
@@ -34,6 +97,7 @@ class GameScene extends Phaser.Scene {
 
     preload() {
         this.load.image('grid', 'assets/img/grass.png');
+        this.load.image('buildingIcon', 'assets/img/building_icon.png'); // Load the building icon image
     }
 
     create() {
@@ -85,6 +149,9 @@ class GameScene extends Phaser.Scene {
                 this.lastPointerY = pointer.y;
             }
         }, this);
+
+        // build button
+        createBuildButton.call(this);
     }
 
     update(time, delta) {
