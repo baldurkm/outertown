@@ -1,12 +1,13 @@
 // Define variables for the build button and building icon
 let buildButton;
 let buildingIcon;
+let buttonBackground;
 const gridSize = 64;
 
 // Function to create the build button
-function createBuildButton() {
+function createBuildButton(gridSize) {
     // Add a semi-transparent background rectangle for the button
-    const buttonBackground = this.add.rectangle(20, 20, 150, 60, 0x000000, 0.5);
+    buttonBackground = this.add.rectangle(20, 20, 150, 60, 0x000000, 0.5);
     buttonBackground.setOrigin(0); // Set the origin to the top-left corner
 
     // Add the build button text
@@ -15,6 +16,8 @@ function createBuildButton() {
     buildButton.setInteractive(); // Enable interactivity
     buildButton.on('pointerdown', showBuildingGrid, this); // Show the building grid when clicked
 }
+
+
 // Function to show the building grid
 function showBuildingGrid() {
     // Create a transparent rectangle to cover the screen and act as the building grid
