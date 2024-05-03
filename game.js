@@ -49,6 +49,8 @@ function isBuildingPlaced(gridX, gridY) {
 
 // Function to place the building icon at the specified grid position
 function placeBuildingIcon(gridX, gridY) {
+console.log("placeBuildingIcon.");
+
     // Remove any existing building icon
     if (buildingIcon) {
         buildingIcon.destroy();
