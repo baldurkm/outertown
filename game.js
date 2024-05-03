@@ -57,7 +57,7 @@ class Example extends Phaser.Scene {
             }
         }, this);
 
-        // Add GUI
+/*        // Add GUI
         const cam = this.cameras.main;
         const gui = new dat.GUI();
         const help = {
@@ -74,7 +74,7 @@ class Example extends Phaser.Scene {
         f1.add(help, 'line1');
         f1.add(help, 'line2');
         f1.open();
-    }
+    }*/
 
     update(time, delta) {
         // Update controls
@@ -85,8 +85,8 @@ class Example extends Phaser.Scene {
 const config = {
     type: Phaser.AUTO,
     parent: 'phaser-example',
-    width: 800,
-    height: 600,
+    width: 1080,
+    height: 1920,
     backgroundColor: '#000000',
     scene: Example
 };
