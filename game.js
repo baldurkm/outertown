@@ -7,37 +7,36 @@ const gridSize = 64;
 // Function to create the build button
 function createBuildButton(gridSize) {
     // Add a semi-transparent background rectangle for the button
-    buttonBackground = this.add.rectangle(20, 20, 150, 60, 0x000000, 0.5);
-    buttonBackground.setOrigin(0); // Set the origin to the top-left corner
+    this.buttonBackground = this.add.rectangle(20, 20, 150, 60, 0x000000, 0.5);
+    this.buttonBackground.setOrigin(0); // Set the origin to the top-left corner
 
     // Add the build button text
-    buildButton = this.add.text(95, 50, 'Build', { fill: '#ffffff', fontSize: '24px' }); // Adjust the fontSize as needed
-    buildButton.setOrigin(0.5); // Set the origin to the center of the text
-    buildButton.setInteractive(); // Enable interactivity
-    buildButton.on('pointerdown', showBuildingGrid, this); // Show the building grid when clicked
+    this.buildButton = this.add.text(95, 50, 'Build', { fill: '#ffffff', fontSize: '24px' }); // Adjust the fontSize as needed
+    this.buildButton.setOrigin(0.5); // Set the origin to the center of the text
+    this.buildButton.setInteractive(); // Enable interactivity
+    this.buildButton.on('pointerdown', () => this.showBuildingGrid(gridSize)); // Show the building grid when clicked
 }
 
-
 // Function to show the building grid
-function showBuildingGrid() {
+function showBuildingGrid(gridSize) {
     // Create a transparent rectangle to cover the screen and act as the building grid
     const buildingGrid = this.add.rectangle(0, 0, this.cameras.main.width, this.cameras.main.height, 0x00ff00, 0.5);
     buildingGrid.setOrigin(0); // Set the origin to the top-left corner
     buildingGrid.setInteractive(); // Enable interactivity
 
     // Listen for pointer events on the building grid
-    this.input.on('pointerdown', function(pointer) {
+    this.input.on('pointerdown', (pointer) => {
         // Calculate the grid position based on the pointer coordinates
         const gridX = Math.floor(pointer.worldX / gridSize);
         const gridY = Math.floor(pointer.worldY / gridSize);
 
         // Check if a building is already placed at this grid position
-        if (!isBuildingPlaced(gridX, gridY)) {
+        if (!this.isBuildingPlaced(gridX, gridY)) {
             // Place the building icon at the grid position
-            placeBuildingIcon(gridX, gridY);
+            this.placeBuildingIcon(gridX, gridY);
         } else {
             // Confirm the building placement
-            confirmBuildingPlacement(gridX, gridY);
+            this.confirmBuildingPlacement(gridX, gridY);
         }
     });
 }
