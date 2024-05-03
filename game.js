@@ -1,25 +1,23 @@
-class Example extends Phaser.Scene
-{
-    constructor ()
-    {
+class Example extends Phaser.Scene {
+    constructor() {
         super();
     }
 
-    preload () 
-    {
+    preload() {
         this.load.image('grid', 'assets/img/grass.png');
     }
 
-    create () 
-    {
-        //  The grid image is 1024 x 1024, let's draw 4 of them (2 by 2)
+    create() {
+        // Add grid images
         this.add.image(0, 0, 'grid').setOrigin(0);
         this.add.image(1024, 0, 'grid').setOrigin(0);
         this.add.image(0, 1024, 'grid').setOrigin(0);
         this.add.image(1024, 1024, 'grid').setOrigin(0);
 
+        // Create cursors for keyboard input
         const cursors = this.input.keyboard.createCursorKeys();
 
+        // Define control config for both keyboard and touch input
         const controlConfig = {
             camera: this.cameras.main,
             left: cursors.left,
@@ -33,17 +31,39 @@ class Example extends Phaser.Scene
             maxSpeed: 1.0
         };
 
+        // Create SmoothedKeyControl for keyboard input
         this.controls = new Phaser.Cameras.Controls.SmoothedKeyControl(controlConfig);
 
+        // Add mobile touch controls
+        this.input.on('pointerdown', function (pointer) {
+            // Store initial touch position
+            this.lastPointerX = pointer.x;
+            this.lastPointerY = pointer.y;
+        }, this);
+
+        this.input.on('pointermove', function (pointer) {
+            if (pointer.isDown && !pointer.isPinch) {
+                // Calculate delta movement of touch
+                const deltaX = pointer.x - this.lastPointerX;
+                const deltaY = pointer.y - this.lastPointerY;
+
+                // Move camera based on touch delta
+                this.cameras.main.scrollX -= deltaX;
+                this.cameras.main.scrollY -= deltaY;
+
+                // Update last touch position
+                this.lastPointerX = pointer.x;
+                this.lastPointerY = pointer.y;
+            }
+        }, this);
+
+        // Add GUI
         const cam = this.cameras.main;
-
         const gui = new dat.GUI();
-
         const help = {
             line1: 'Cursors to move',
             line2: 'Q & E to zoom'
-        }
-
+        };
         const f1 = gui.addFolder('Camera');
         f1.add(cam, 'x').listen();
         f1.add(cam, 'y').listen();
@@ -56,8 +76,8 @@ class Example extends Phaser.Scene
         f1.open();
     }
 
-    update (time, delta) 
-    {
+    update(time, delta) {
+        // Update controls
         this.controls.update(delta);
     }
 }
