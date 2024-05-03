@@ -1,6 +1,35 @@
-class Example extends Phaser.Scene {
+class MainMenu extends Phaser.Scene {
     constructor() {
-        super();
+        super({ key: 'MainMenu' });
+    }
+
+    preload() {
+        // Preload assets for the main menu
+        this.load.image('background', 'assets/background.jpg');
+        this.load.image('playButton', 'assets/play_button.png');
+    }
+
+    create() {
+        // Add background image
+        this.add.image(0, 0, 'background').setOrigin(0);
+
+        // Add title text
+        this.add.text(this.cameras.main.centerX, 100, 'Main Menu', { fontSize: '48px', fill: '#fff' }).setOrigin(0.5);
+
+        // Add play button
+        const playButton = this.add.image(this.cameras.main.centerX, this.cameras.main.centerY, 'playButton').setInteractive();
+        
+        // Add event listener to play button
+        playButton.on('pointerdown', () => {
+            this.scene.start('GameScene'); // Start the game scene when the play button is clicked
+        });
+    }
+}
+
+
+class GameScene extends Phaser.Scene {
+    constructor() {
+        super({ key: 'GameScene' });
     }
 
     preload() {
@@ -66,11 +95,11 @@ class Example extends Phaser.Scene {
 
 const config = {
     type: Phaser.AUTO,
-    parent: 'phaser-example',
     width: 1080,
     height: 1920,
     backgroundColor: '#000000',
-    scene: Example
+    scene: [MainMenu, GameScene]
 };
 
+// Create a new Phaser game instance with the defined configuration
 const game = new Phaser.Game(config);
