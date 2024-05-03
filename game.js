@@ -6,7 +6,7 @@ class MainMenu extends Phaser.Scene {
     preload() {
         // Preload assets for the main menu
         this.load.image('background', 'assets/img/background.jpg');
-        this.load.image('playButton', 'assets/img/play_button.png');
+        this.load.image('playButton', 'assets/img/play_button.jpg');
     }
 
     create() {
