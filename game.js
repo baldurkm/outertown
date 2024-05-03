@@ -7,14 +7,14 @@ const gridSize = 64;
 // Function to create the build button
 function createBuildButton(gridSize) {
     // Add a semi-transparent background rectangle for the button
-    this.buttonBackground = this.add.rectangle(20, 20, 150, 60, 0x000000, 0.5);
-    this.buttonBackground.setOrigin(0); // Set the origin to the top-left corner
+    buttonBackground = this.add.rectangle(20, 20, 150, 60, 0x000000, 0.5);
+    buttonBackground.setOrigin(0); // Set the origin to the top-left corner
 
     // Add the build button text
-    this.buildButton = this.add.text(95, 50, 'Build', { fill: '#ffffff', fontSize: '24px' }); // Adjust the fontSize as needed
-    this.buildButton.setOrigin(0.5); // Set the origin to the center of the text
-    this.buildButton.setInteractive(); // Enable interactivity
-    this.buildButton.on('pointerdown', () => this.showBuildingGrid(gridSize)); // Show the building grid when clicked
+    buildButton = this.add.text(95, 50, 'Build', { fill: '#ffffff', fontSize: '24px' }); // Adjust the fontSize as needed
+    buildButton.setOrigin(0.5); // Set the origin to the center of the text
+    buildButton.setInteractive(); // Enable interactivity
+    buildButton.on('pointerdown', () => showBuildingGrid.call(this, gridSize)); // Show the building grid when clicked
 }
 
 // Function to show the building grid
@@ -31,12 +31,12 @@ function showBuildingGrid(gridSize) {
         const gridY = Math.floor(pointer.worldY / gridSize);
 
         // Check if a building is already placed at this grid position
-        if (!this.isBuildingPlaced(gridX, gridY)) {
+        if (!isBuildingPlaced(gridX, gridY)) {
             // Place the building icon at the grid position
-            this.placeBuildingIcon(gridX, gridY);
+            placeBuildingIcon.call(this, gridX, gridY);
         } else {
             // Confirm the building placement
-            this.confirmBuildingPlacement(gridX, gridY);
+            confirmBuildingPlacement.call(this, gridX, gridY);
         }
     });
 }
