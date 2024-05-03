@@ -159,10 +159,19 @@ class GameScene extends Phaser.Scene {
         createBuildButton.call(this);
     }
 
-    update(time, delta) {
-        // Update controls
-        this.controls.update(delta);
+update(time, delta) {
+    // Update controls
+    this.controls.update(delta);
+
+    // Update the position of the build button based on the camera's position
+    const cameraScrollX = this.cameras.main.scrollX;
+    const cameraScrollY = this.cameras.main.scrollY;
+    buttonBackground.x = 20 - cameraScrollX;
+    buttonBackground.y = 20 - cameraScrollY;
+    buildButton.x = 95 - cameraScrollX;
+    buildButton.y = 50 - cameraScrollY;
     }
+    
 }
 
 const config = {
