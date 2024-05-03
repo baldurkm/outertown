@@ -4,12 +4,16 @@ let buildingIcon;
 
 // Function to create the build button
 function createBuildButton() {
-    // Add the build button to the scene
-    buildButton = this.add.text(20, 20, 'Build', { fill: '#ffffff' });
+    // Add a semi-transparent background rectangle for the button
+    const buttonBackground = this.add.rectangle(20, 20, 150, 60, 0x000000, 0.5);
+    buttonBackground.setOrigin(0); // Set the origin to the top-left corner
+
+    // Add the build button text
+    buildButton = this.add.text(95, 50, 'Build', { fill: '#ffffff', fontSize: '24px' }); // Adjust the fontSize as needed
+    buildButton.setOrigin(0.5); // Set the origin to the center of the text
     buildButton.setInteractive(); // Enable interactivity
     buildButton.on('pointerdown', showBuildingGrid, this); // Show the building grid when clicked
 }
-
 // Function to show the building grid
 function showBuildingGrid() {
     // Create a transparent rectangle to cover the screen and act as the building grid
