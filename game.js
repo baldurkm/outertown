@@ -19,6 +19,7 @@ function createBuildButton(gridSize) {
 
 // Function to show the building grid
 function showBuildingGrid(gridSize) {
+    console.log("Showing Building Grid.");
     // Create a transparent rectangle to cover the screen and act as the building grid
     const buildingGrid = this.add.rectangle(0, 0, this.cameras.main.width, this.cameras.main.height, 0x00ff00, 0.5);
     buildingGrid.setOrigin(0); // Set the origin to the top-left corner
