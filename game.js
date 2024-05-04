@@ -5,7 +5,7 @@ let buttonBackground;
 const gridSize = 64;
 
 // Function to create the build button
-function createBuildButton(gridSize) {
+function createBuildButton() {
     // Add a semi-transparent background rectangle for the button
     buttonBackground = this.add.rectangle(20, 20, 150, 60, 0x000000, 0.5);
     buttonBackground.setOrigin(0); // Set the origin to the top-left corner
