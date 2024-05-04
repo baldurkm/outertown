@@ -14,41 +14,38 @@ function createBuildButton(gridSize) {
     buildButton = this.add.text(95, 50, 'Build', { fill: '#ffffff', fontSize: '24px' }); // Adjust the fontSize as needed
     buildButton.setOrigin(0.5); // Set the origin to the center of the text
     buildButton.setInteractive(); // Enable interactivity
-    buildButton.on('pointerdown', () => showBuildingGrid(gridSize)); // Show the building grid when clicked
+    buildButton.on('pointerdown', () => showBuildingGrid.call(this, gridSize)); // Show the building grid when clicked
 }
 
 // Function to show the building grid
 function showBuildingGrid(gridSize) {
     console.log("Showing Building Grid.");
 
-    // Remove any existing event listeners
+    // Remove any existing 'pointerdown' event listener
     this.input.off('pointerdown');
-
+    console.log("Pointer down within grid.");
     // Create a transparent rectangle to cover the screen and act as the building grid
     const buildingGrid = this.add.rectangle(0, 0, this.cameras.main.width, this.cameras.main.height, 0x00ff00, 0.5);
     buildingGrid.setOrigin(0); // Set the origin to the top-left corner
     buildingGrid.setInteractive(); // Enable interactivity
 
     // Listen for pointer events on the building grid
-    this.input.on('pointerdown', handlePointerDown.bind(this));
-}
+    this.input.on('pointerdown', (pointer) => {
+        // Calculate the grid position based on the pointer coordinates
+        const gridX = Math.floor(pointer.worldX / gridSize);
+        const gridY = Math.floor(pointer.worldY / gridSize);
+        console.log("Calculating grid position: " + gridX + ", " + gridY);
+        console.log("isBuildingPlaced: " + isBuildingPlaced);
 
-// Function to handle pointer down events
-function handlePointerDown(pointer) {
-    // Calculate the grid position based on the pointer coordinates
-    const gridX = Math.floor(pointer.worldX / gridSize);
-    const gridY = Math.floor(pointer.worldY / gridSize);
-    console.log("Calculating grid position: " + gridX + ", " + gridY);
-    console.log("isBuildingPlaced: " + isBuildingPlaced);
-
-    // Check if a building is already placed at this grid position
-    if (!isBuildingPlaced(gridX, gridY)) {
-        // Place the building icon at the grid position
-        placeBuildingIcon.call(this, gridX, gridY);
-    } else {
-        // Confirm the building placement
-        confirmBuildingPlacement.call(this, gridX, gridY);
-    }
+        // Check if a building is already placed at this grid position
+        if (!isBuildingPlaced(gridX, gridY)) {
+            // Place the building icon at the grid position
+            placeBuildingIcon.call(this, gridX, gridY);
+        } else {
+            // Confirm the building placement
+            confirmBuildingPlacement.call(this, gridX, gridY);
+        }
+    });
 }
 
 // Function to check if a building is already placed at the specified grid position
@@ -59,7 +56,7 @@ function isBuildingPlaced(gridX, gridY) {
 
 // Function to place the building icon at the specified grid position
 function placeBuildingIcon(gridX, gridY) {
-    console.log("placeBuildingIcon.");
+console.log("placeBuildingIcon.");
 
     // Remove any existing building icon
     if (buildingIcon) {
@@ -79,7 +76,6 @@ function confirmBuildingPlacement(gridX, gridY) {
     buildingIcon.destroy();
     this.input.off('pointerdown'); // Disable pointer events on the building grid
 }
-
 
 class MainMenu extends Phaser.Scene {
     constructor() {
