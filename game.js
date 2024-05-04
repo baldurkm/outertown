@@ -29,6 +29,8 @@ function showBuildingGrid(gridSize) {
         // Calculate the grid position based on the pointer coordinates
         const gridX = Math.floor(pointer.worldX / gridSize);
         const gridY = Math.floor(pointer.worldY / gridSize);
+        console.log("Calculating grid position: " + gridX + ", " + gridY);
+        console.log("isBuildingPlaced: " + isBuildingPlaced);
 
         // Check if a building is already placed at this grid position
         if (!isBuildingPlaced(gridX, gridY)) {
