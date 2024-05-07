@@ -78,6 +78,8 @@ function showBuildingGrid(gridSize) {
         console.log("Drew from " + y + " to " + this.cameras.main.width);
     }
 
+        this.graphics.draw();
+
     // Listen for pointer events on the building grid
     this.input.on('pointerdown', (pointer) => {
         // Calculate the grid position based on the pointer coordinates
