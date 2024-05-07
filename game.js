@@ -96,7 +96,6 @@ function showBuildingGrid(gridSize) {
     });
 }
 
-
 class MainMenu extends Phaser.Scene {
     constructor() {
         super({ key: 'MainMenu' });
