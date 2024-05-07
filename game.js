@@ -78,8 +78,6 @@ function showBuildingGrid(gridSize) {
         console.log("Drew from " + y + " to " + this.cameras.main.width);
     }
 
-        this.graphics.draw();
-
     // Listen for pointer events on the building grid
     this.input.on('pointerdown', (pointer) => {
         // Calculate the grid position based on the pointer coordinates
@@ -198,6 +196,10 @@ class GameScene extends Phaser.Scene {
 update(time, delta) {
     // Update controls
     this.controls.update(delta);
+
+    graphics.moveTo(0, 0);
+    graphics.lineTo(500, 500);
+
 
     // Update the position of the build button based on the camera's position
     const cameraScrollX = this.cameras.main.scrollX;
