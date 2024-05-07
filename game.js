@@ -3,6 +3,8 @@ let buildButton;
 let buildingIcon;
 let buttonBackground;
 const gridSize = 64;
+const gridWidth = 20; // Set the width of the grid
+const gridHeight = 20; // Set the height of the grid
 
 // Define a 2D array to represent the building grid, initialized with empty values
 let buildingGrid = [];
