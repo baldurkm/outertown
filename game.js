@@ -62,7 +62,7 @@ function showBuildingGrid(gridSize) {
     const graphics = this.add.graphics();
 
     // Set line style for the grid lines
-    graphics.lineStyle(2, 0x000000, 1); // 2 pixels thick, black color, alpha 1 (fully opaque)
+    graphics.lineStyle(2, 0xffffff, 1); // 2 pixels thick, black color, alpha 1 (fully opaque)
 
     // Draw vertical grid lines
     for (let x = 0; x <= this.cameras.main.width; x += gridSize) {
