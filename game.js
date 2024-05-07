@@ -197,8 +197,9 @@ update(time, delta) {
     // Update controls
     this.controls.update(delta);
 
-    graphics.moveTo(0, 0);
-    graphics.lineTo(500, 500);
+    const graphicstest = this.add.graphics();
+    graphicstest.moveTo(0, 0);
+    graphicstest.lineTo(500, 500);
 
 
     // Update the position of the build button based on the camera's position
