@@ -143,6 +143,8 @@ class GameScene extends Phaser.Scene {
         this.add.image(0, 1024, 'grid').setOrigin(0);
         this.add.image(1024, 1024, 'grid').setOrigin(0);
 
+            initializebuildingGrid();
+
         // Create cursors for keyboard input
         const cursors = this.input.keyboard.createCursorKeys();
 
