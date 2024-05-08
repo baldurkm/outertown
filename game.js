@@ -123,6 +123,11 @@ class MainMenu extends Phaser.Scene {
         playButton.on('pointerdown', () => {
             this.scene.start('GameScene'); // Start the game scene when the play button is clicked
         });
+
+        const graphicstest = this.add.graphics();
+        graphicstest.moveTo(0, 0);
+        graphicstest.lineTo(500, 500);
+    
     }
 }
 
@@ -197,9 +202,7 @@ update(time, delta) {
     // Update controls
     this.controls.update(delta);
 
-    const graphicstest = this.add.graphics();
-    graphicstest.moveTo(0, 0);
-    graphicstest.lineTo(500, 500);
+
 
 
     // Update the position of the build button based on the camera's position
@@ -209,6 +212,9 @@ update(time, delta) {
     buttonBackground.y = 20 - cameraScrollY;
     buildButton.x = 95 - cameraScrollX;
     buildButton.y = 50 - cameraScrollY;
+
+
+
     }
     
 }
