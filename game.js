@@ -65,19 +65,20 @@ function showBuildingGrid(gridSize) {
     graphics.lineStyle(2, 0xffffff, 1); // 2 pixels thick, black color, alpha 1 (fully opaque)
 
     // Draw vertical grid lines
-    for (let x = 0; x <= this.cameras.main.width; x += gridSize) {
-        graphics.moveTo(x, 0); // Move to the starting point of the line
-        graphics.lineTo(x, this.cameras.main.height); // Draw a line from the starting point to the bottom of the screen
-        console.log("Drew from " + x + " to " + this.cameras.main.height);
-    }
 
-    // Draw horizontal grid lines
-    for (let y = 0; y <= this.cameras.main.height; y += gridSize) {
-        graphics.moveTo(0, y); // Move to the starting point of the line
-        graphics.lineTo(this.cameras.main.width, y); // Draw a line from the starting point to the right edge of the screen
-        console.log("Drew from " + y + " to " + this.cameras.main.width);
-    }
+for (let x = 0; x <= this.cameras.main.width; x += gridSize) {
+    graphics.moveTo(x, 0); // Move to the starting point of the line
+    graphics.lineTo(x, this.cameras.main.height); // Draw a line from the starting point to the bottom of the screen
+}
+graphics.strokePath(); // Stroke the path to actually draw the lines
 
+// Draw horizontal grid lines
+for (let y = 0; y <= this.cameras.main.height; y += gridSize) {
+    graphics.moveTo(0, y); // Move to the starting point of the line
+    graphics.lineTo(this.cameras.main.width, y); // Draw a line from the starting point to the right edge of the screen
+}
+graphics.strokePath(); // Stroke the path to actually draw the lines
+    
     // Listen for pointer events on the building grid
     this.input.on('pointerdown', (pointer) => {
         // Calculate the grid position based on the pointer coordinates
