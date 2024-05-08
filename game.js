@@ -2,18 +2,17 @@
 let buildButton;
 let buildingIcon;
 let buttonBackground;
-const gridSize = 64;
-const gridWidth = 20; // Set the width of the grid
-const gridHeight = 20; // Set the height of the grid
+const gridSize = 128;
+
 
 // Define a 2D array to represent the building grid, initialized with empty values
 let buildingGrid = [];
 
 // Function to initialize the grid array
 function initializebuildingGrid() {
-    for (let i = 0; i < gridWidth; i++) {
+    for (let i = 0; i < gridSize; i++) {
         buildingGrid[i] = [];
-        for (let j = 0; j < gridHeight; j++) {
+        for (let j = 0; j < gridSize; j++) {
             buildingGrid[i][j] = []; // Initialize each grid square as an empty array
         }
     }
@@ -42,11 +41,13 @@ function createBuildButton() {
     // Add a semi-transparent background rectangle for the button
     buttonBackground = this.add.rectangle(20, 20, 150, 60, 0x000000, 0.5);
     buttonBackground.setOrigin(0); // Set the origin to the top-left corner
+    buttonBackground.setScrollFactor(0,0);
 
     // Add the build button text
     buildButton = this.add.text(95, 50, 'Build', { fill: '#ffffff', fontSize: '24px' }); // Adjust the fontSize as needed
     buildButton.setOrigin(0.5); // Set the origin to the center of the text
     buildButton.setInteractive(); // Enable interactivity
+    buildButton.setScrollFactor(0,0);
     buildButton.on('pointerdown', () => showBuildingGrid.call(this, gridSize)); // Show the building grid when clicked
 }
 
@@ -62,7 +63,7 @@ function showBuildingGrid(gridSize) {
     const graphics = this.add.graphics();
 
     // Set line style for the grid lines
-    graphics.lineStyle(2, 0xffffff, 1); // 2 pixels thick, black color, alpha 1 (fully opaque)
+    graphics.lineStyle(2, 0x000000, 1); // 2 pixels thick, black color, alpha 1 (fully opaque)
 
     // Draw vertical grid lines
 
@@ -202,19 +203,6 @@ class GameScene extends Phaser.Scene {
 update(time, delta) {
     // Update controls
     this.controls.update(delta);
-
-
-
-
-    // Update the position of the build button based on the camera's position
-    const cameraScrollX = this.cameras.main.scrollX;
-    const cameraScrollY = this.cameras.main.scrollY;
-    buttonBackground.x = 20 - cameraScrollX;
-    buttonBackground.y = 20 - cameraScrollY;
-    buildButton.x = 95 - cameraScrollX;
-    buildButton.y = 50 - cameraScrollY;
-
-
 
     }
     
