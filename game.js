@@ -39,7 +39,7 @@ class GameScene extends Phaser.Scene {
     }
 
     preload() {
-        this.load.image('grid', 'assets/img/grass.png');
+        //this.load.image('grid', 'assets/img/grass.png');
         this.load.image('buildingIcon', 'assets/img/building_icon.png'); // Load the building icon image
         this.generateTerrain();
     }
