@@ -4,6 +4,7 @@ let buttonBackground;
 const gridSize = 64;
 var mapWidth = 18040; // Width of the game map
 var mapHeight = 9000; // Height of the game map
+var buildMode = false;
 
 class MainMenu extends Phaser.Scene {
     constructor() {
@@ -103,6 +104,10 @@ class GameScene extends Phaser.Scene {
 
     update(time, delta) {
         // Update controls
+        if (buildMode) {
+            this.drawGrid(gridSize);
+        }
+    
         this.controls.update(delta);
     }
 
@@ -147,8 +152,8 @@ class GameScene extends Phaser.Scene {
             //console.log("Done assigning images.");
     
             // Loop through each grid cell and assign a terrain type based on simplex noise
-            const mapWidth = 18040; // Width of the game map
-            const mapHeight = 9000; // Height of the game map
+            const mapWidth = 4500; // Width of the game map
+            const mapHeight = 9020; // Height of the game map
             const gridSize = 64;
             for (let y = 0; y < mapHeight; y += gridSize) {
                 //console.log("Outer loop. " + y);
@@ -170,56 +175,73 @@ class GameScene extends Phaser.Scene {
         // Add a semi-transparent background rectangle for the button
         buttonBackground = this.add.rectangle(20, 20, 150, 60, 0x000000, 0.5);
         buttonBackground.setOrigin(0); // Set the origin to the top-left corner
+        buttonBackground.setScrollFactor(0,0);
 
         // Add the build button text
         buildButton = this.add.text(95, 50, 'Build', { fill: '#ffffff', fontSize: '24px' }); // Adjust the fontSize as needed
         buildButton.setOrigin(0.5); // Set the origin to the center of the text
         buildButton.setInteractive(); // Enable interactivity
-        buildButton.on('pointerdown', () => this.showBuildingGrid(gridSize)); // Show the building grid when clicked
+        buildButton.on('pointerdown', () => buildMode = true); // Show the building grid when clicked
+        buildButton.setScrollFactor(0,0);
     }
 
-    showBuildingGrid(gridSize) {
-        console.log("Showing Building Grid.");
+    drawGrid(gridSize) {
+        if (buildMode == true) {
 
+        console.log("Showing Building Grid.");
+    
         // Remove any existing 'pointerdown' event listener
         this.input.off('pointerdown');
-
+    
         // Create a graphics object to draw the grid lines
         const graphics = this.add.graphics();
-
+    
         // Set line style for the grid lines
         graphics.lineStyle(2, 0x000000, 1); // 2 pixels thick, black color, alpha 1 (fully opaque)
-
+    
         // Draw vertical grid lines
         for (let x = 0; x <= this.cameras.main.width; x += gridSize) {
             graphics.moveTo(x, 0); // Move to the starting point of the line
             graphics.lineTo(x, this.cameras.main.height); // Draw a line from the starting point to the bottom of the screen
         }
         graphics.strokePath(); // Stroke the path to actually draw the lines
-
+    
         // Draw horizontal grid lines
         for (let y = 0; y <= this.cameras.main.height; y += gridSize) {
             graphics.moveTo(0, y); // Move to the starting point of the line
             graphics.lineTo(this.cameras.main.width, y); // Draw a line from the starting point to the right edge of the screen
         }
         graphics.strokePath(); // Stroke the path to actually draw the lines
-
+    
         // Listen for pointer events on the building grid
         this.input.on('pointerdown', (pointer) => {
             // Calculate the grid position based on the pointer coordinates
             const gridX = Math.floor(pointer.worldX / gridSize);
             const gridY = Math.floor(pointer.worldY / gridSize);
-
+            console.log("Pointer down at " + gridX + ", " + gridY);
+            console.log("Check for buildings: " + this.isBuildingPlaced(gridX, gridY));
             // Check if a building is already placed at this grid position
             if (!this.isBuildingPlaced(gridX, gridY)) {
                 // Place the building icon at the grid position
                 this.placeBuildingInGrid(gridX, gridY, this);
+                console.log("Placed building.");
+                buildButton.setInteractive(); // Re-enable the build button
+                buildMode = false;
             } else {
                 // Confirm the building placement
-                // this.placeBuildingInGrid(gridX, gridY);
+                //this.placeBuildingInGrid(gridX, gridY);
+                buildButton.setInteractive(); // Re-enable the build button
+                buildMode = false;
             }
         });
     }
+    else // if build mode is not active
+    {
+        graphics.destroy();
+        this.input.off('pointerdown');
+    }
+
+}
 
     isBuildingPlaced(gridX, gridY) {
         return this.buildingGrid[gridX][gridY].length > 0; // Return true if there are buildings in the grid square
