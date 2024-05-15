@@ -40,25 +40,17 @@ class GameScene extends Phaser.Scene {
     }
 
     preload() {
-        //this.load.image('grid', 'assets/img/grass.png');
         this.load.image('buildingIcon', 'assets/img/building_icon.png'); // Load the building icon image
         this.generateTerrain();
     }
 
     create() {
-        // Add grid images
-
-
         // Initialize building grid
         this.initializeBuildingGrid();
-
-        // Generate terrain
-
 
         // Create cursors for keyboard input
         const cursors = this.input.keyboard.createCursorKeys();
 
-        // Define control config for both keyboard and touch input
         const controlConfig = {
             camera: this.cameras.main,
             left: cursors.left,
@@ -72,27 +64,21 @@ class GameScene extends Phaser.Scene {
             maxSpeed: 1.0
         };
 
-        // Create SmoothedKeyControl for keyboard input
         this.controls = new Phaser.Cameras.Controls.SmoothedKeyControl(controlConfig);
 
-        // Add mobile touch controls
         this.input.on('pointerdown', function (pointer) {
-            // Store initial touch position
             this.lastPointerX = pointer.x;
             this.lastPointerY = pointer.y;
         }, this);
 
         this.input.on('pointermove', function (pointer) {
             if (pointer.isDown && !pointer.isPinch) {
-                // Calculate delta movement of touch
                 const deltaX = pointer.x - this.lastPointerX;
                 const deltaY = pointer.y - this.lastPointerY;
 
-                // Move camera based on touch delta
                 this.cameras.main.scrollX -= deltaX;
                 this.cameras.main.scrollY -= deltaY;
 
-                // Update last touch position
                 this.lastPointerX = pointer.x;
                 this.lastPointerY = pointer.y;
             }
@@ -103,11 +89,10 @@ class GameScene extends Phaser.Scene {
     }
 
     update(time, delta) {
-        // Update controls
         if (buildMode) {
             this.drawGrid(gridSize);
         }
-    
+
         this.controls.update(delta);
     }
 
@@ -122,139 +107,107 @@ class GameScene extends Phaser.Scene {
     }
 
     generateTerrain() {
-        // Initialize simplex noise for terrain generation
         const simplex = new SimplexNoise();
         console.log("Starting terrain generation");
-    
-        // Define an object to hold terrain type image paths
+
         const terrainTypeImagePaths = {
             'grass': 'assets/img/grass.png',
             'desert': 'assets/img/desert.png',
             'badlands': 'assets/img/badlands.png'
         };
-    
-        // Preload terrain type images
+
         for (let terrainType in terrainTypeImagePaths) {
             const imagePath = terrainTypeImagePaths[terrainType];
             this.load.image(terrainType, imagePath);
-            //console.log("Loaded image. " + terrainTypeImagePaths[terrainType]);
         }
 
-        //console.log("Done loading images.");
-    
-        // Assign loaded images to terrainTypes after they are loaded
-        const terrainTypes = {}; // Define an object to hold references to loaded terrain type images
+        const terrainTypes = {};
         this.load.on('complete', () => {
             for (let terrainType in terrainTypeImagePaths) {
                 terrainTypes[terrainType] = this.textures.get(terrainType);
-                //console.log("Assigned image. " + terrainTypes[terrainType]);
             }
-            //console.log("Done assigning images.");
-    
-            // Loop through each grid cell and assign a terrain type based on simplex noise
-            const mapWidth = 4500; // Width of the game map
-            const mapHeight = 9020; // Height of the game map
+
+            const mapWidth = 4500;
+            const mapHeight = 9020;
             const gridSize = 64;
             for (let y = 0; y < mapHeight; y += gridSize) {
-                //console.log("Outer loop. " + y);
                 for (let x = 0; x < mapWidth; x += gridSize) {
-                    //console.log("Inner loop. " + x);
                     const noiseValue = simplex.noise2D(x * 0.001, y * 0.001);
                     const terrainType = noiseValue < -0.5 ? 'desert' : noiseValue < 0 ? 'badlands' : 'grass';
                     const tileX = Phaser.Math.Between(0, terrainTypes[terrainType].width / gridSize - 1) * gridSize;
                     const tileY = Phaser.Math.Between(0, terrainTypes[terrainType].height / gridSize - 1) * gridSize;
                     this.add.image(x, y, terrainType, tileX, tileY).setOrigin(0);
-                    //console.log("Adding texture tile");
                 }
             }
-            //console.log("Passed for loops.");
         });
     }
 
     createBuildButton() {
-        // Add a semi-transparent background rectangle for the button
         buttonBackground = this.add.rectangle(20, 20, 150, 60, 0x000000, 0.5);
-        buttonBackground.setOrigin(0); // Set the origin to the top-left corner
-        buttonBackground.setScrollFactor(0,0);
+        buttonBackground.setOrigin(0);
+        buttonBackground.setScrollFactor(0, 0);
 
-        // Add the build button text
-        buildButton = this.add.text(95, 50, 'Build', { fill: '#ffffff', fontSize: '24px' }); // Adjust the fontSize as needed
-        buildButton.setOrigin(0.5); // Set the origin to the center of the text
-        buildButton.setInteractive(); // Enable interactivity
-        buildButton.on('pointerdown', () => buildMode = true); // Show the building grid when clicked
-        buildButton.setScrollFactor(0,0);
+        buildButton = this.add.text(95, 50, 'Build', { fill: '#ffffff', fontSize: '24px' });
+        buildButton.setOrigin(0.5);
+        buildButton.setInteractive();
+        buildButton.on('pointerdown', () => buildMode = true);
+        buildButton.setScrollFactor(0, 0);
     }
 
     drawGrid(gridSize) {
-        if (buildMode == true) {
+        if (buildMode) {
+            console.log("Showing Building Grid.");
 
-        console.log("Showing Building Grid.");
-    
-        // Remove any existing 'pointerdown' event listener
-        this.input.off('pointerdown');
-    
-        // Create a graphics object to draw the grid lines
-        const graphics = this.add.graphics();
-    
-        // Set line style for the grid lines
-        graphics.lineStyle(2, 0x000000, 1); // 2 pixels thick, black color, alpha 1 (fully opaque)
-    
-        // Draw vertical grid lines
-        for (let x = 0; x <= this.cameras.main.width; x += gridSize) {
-            graphics.moveTo(x, 0); // Move to the starting point of the line
-            graphics.lineTo(x, this.cameras.main.height); // Draw a line from the starting point to the bottom of the screen
-        }
-        graphics.strokePath(); // Stroke the path to actually draw the lines
-    
-        // Draw horizontal grid lines
-        for (let y = 0; y <= this.cameras.main.height; y += gridSize) {
-            graphics.moveTo(0, y); // Move to the starting point of the line
-            graphics.lineTo(this.cameras.main.width, y); // Draw a line from the starting point to the right edge of the screen
-        }
-        graphics.strokePath(); // Stroke the path to actually draw the lines
-    
-        // Listen for pointer events on the building grid
-        this.input.on('pointerdown', (pointer) => {
-            // Calculate the grid position based on the pointer coordinates
-            const gridX = Math.floor(pointer.worldX / gridSize);
-            const gridY = Math.floor(pointer.worldY / gridSize);
-            console.log("Pointer down at " + gridX + ", " + gridY);
-            console.log("Check for buildings: " + this.isBuildingPlaced(gridX, gridY));
-            // Check if a building is already placed at this grid position
-            if (!this.isBuildingPlaced(gridX, gridY)) {
-                // Place the building icon at the grid position
-                this.placeBuildingInGrid(gridX, gridY, this);
-                console.log("Placed building.");
-                buildButton.setInteractive(); // Re-enable the build button
-                buildMode = false;
-            } else {
-                // Confirm the building placement
-                //this.placeBuildingInGrid(gridX, gridY);
-                buildButton.setInteractive(); // Re-enable the build button
-                buildMode = false;
+            this.input.off('pointerdown');
+
+            const graphics = this.add.graphics();
+            graphics.lineStyle(2, 0x000000, 1);
+
+            for (let x = 0; x <= this.cameras.main.width; x += gridSize) {
+                graphics.moveTo(x, 0);
+                graphics.lineTo(x, this.cameras.main.height);
             }
-        });
-    }
-    else // if build mode is not active
-    {
-        graphics.destroy();
-        this.input.off('pointerdown');
-    }
+            graphics.strokePath();
 
-}
+            for (let y = 0; y <= this.cameras.main.height; y += gridSize) {
+                graphics.moveTo(0, y);
+                graphics.lineTo(this.cameras.main.width, y);
+            }
+            graphics.strokePath();
+
+            this.input.on('pointerdown', (pointer) => {
+                const gridX = Math.floor(pointer.worldX / gridSize);
+                const gridY = Math.floor(pointer.worldY / gridSize);
+                console.log("Pointer down at " + gridX + ", " + gridY);
+                console.log("Check for buildings: " + this.isBuildingPlaced(gridX, gridY));
+                if (!this.isBuildingPlaced(gridX, gridY)) {
+                    this.placeBuildingInGrid(gridX, gridY);
+                    console.log("Placed building.");
+                    buildButton.setInteractive();
+                    buildMode = false;
+                } else {
+                    buildButton.setInteractive();
+                    buildMode = false;
+                }
+            });
+        } else {
+            this.input.off('pointerdown');
+        }
+    }
 
     isBuildingPlaced(gridX, gridY) {
-        return this.buildingGrid[gridX][gridY].length > 0; // Return true if there are buildings in the grid square
+        return this.buildingGrid[gridX][gridY].length > 0;
     }
 
-    placeBuildingInGrid(gridX, gridY, buildingType) {
-        this.buildingGrid[gridX][gridY].push(buildingType); // Add the building to the array at the specified grid square
+    placeBuildingInGrid(gridX, gridY) {
+        this.buildingGrid[gridX][gridY].push('buildingIcon'); // Store reference to the building
+        this.add.image(gridX * gridSize, gridY * gridSize, 'buildingIcon').setOrigin(0); // Add the building image to the scene
     }
 
     removeBuildingFromGrid(gridX, gridY, buildingType) {
         const index = this.buildingGrid[gridX][gridY].indexOf(buildingType);
         if (index !== -1) {
-            this.buildingGrid[gridX][gridY].splice(index, 1); // Remove the building from the array at the specified grid square
+            this.buildingGrid[gridX][gridY].splice(index, 1);
         }
     }
 }
@@ -267,5 +220,4 @@ const config = {
     scene: [MainMenu, GameScene]
 };
 
-// Create a new Phaser game instance with the defined configuration
 const game = new Phaser.Game(config);
