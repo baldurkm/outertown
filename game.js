@@ -202,6 +202,7 @@ class GameScene extends Phaser.Scene {
     placeBuildingInGrid(gridX, gridY) {
         this.buildingGrid[gridX][gridY].push('buildingIcon'); // Store reference to the building
         this.add.image(gridX * gridSize, gridY * gridSize, 'buildingIcon').setOrigin(0); // Add the building image to the scene
+        buildMode = false;
     }
 
     removeBuildingFromGrid(gridX, gridY, buildingType) {
